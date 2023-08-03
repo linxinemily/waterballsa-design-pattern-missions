@@ -1,0 +1,6 @@
+2023-04-19 00:13:13.366 |-INFO app.game - This is an info message from app.game logger.
+2023-04-19 00:13:13.366 |-TRACE app.game.ai - This is a trace message from app.game.ai logger.
+2023-04-19 00:21:34.788 |-INFO app.game - This is an info message from app.game logger.
+2023-04-19 00:21:34.789 |-TRACE app.game.ai - This is a trace message from app.game.ai logger.
+2023-04-19 00:21:47.887 |-INFO app.game - This is an info message from app.game logger.
+2023-04-19 00:21:47.887 |-TRACE app.game.ai - This is a trace message from app.game.ai logger.

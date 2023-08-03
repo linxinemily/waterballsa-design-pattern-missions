@@ -1,0 +1,26 @@
+[
+  {
+    "id": "A123456789",
+    "name": "王小明",
+    "gender": "male",
+    "age": 22,
+    "height": 175.2,
+    "weight": 70.5
+  },
+  {
+    "id": "B223456789",
+    "name": "陳花花",
+    "gender": "female",
+    "age": 18,
+    "height": 157.3,
+    "weight": 55.8
+  },
+  {
+    "id": "A103456789",
+    "name": "王阿伯",
+    "gender": "male",
+    "age": 55,
+    "height": 168.8,
+    "weight": 86.2
+  }
+]
