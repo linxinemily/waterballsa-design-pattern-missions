@@ -9,7 +9,7 @@ func NewSummonSkill(owner Role) *SummonSkill {
 }
 
 func (s *SummonSkill) execute(targets []Role) {
-	slime := s.owner.getRPG().createSlime()
+	slime := s.owner.getRPG().CreateSlime()
 	s.owner.getTroop().addRole(slime)
 }
 
