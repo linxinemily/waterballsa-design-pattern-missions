@@ -4,11 +4,11 @@ type CurseSkill struct {
 	*AbstractSkill
 }
 
-func NewCurseSkill(owner *RoleImpl) *CurseSkill {
+func NewCurseSkill(owner Role) *CurseSkill {
 	return &CurseSkill{NewAbstractSkill(owner, 100, "詛咒")}
 }
 
-func (s *CurseSkill) execute(targets []*RoleImpl) {
+func (s *CurseSkill) execute(targets []Role) {
 	target := targets[0]
 	//先檢查如果 taker 已被相同 giver 詛咒，就跳過
 	if _, ok := target.getAfflictedObservers()[s.owner.getId()]; !ok {
@@ -16,9 +16,9 @@ func (s *CurseSkill) execute(targets []*RoleImpl) {
 	}
 }
 
-func (s *CurseSkill) getTargets(allRolesOnBattle []*RoleImpl) []*RoleImpl {
+func (s *CurseSkill) getTargets(allRolesOnBattle []Role) []Role {
 
-	candidates := make([]*RoleImpl, 0)
+	candidates := make([]Role, 0)
 
 	for _, role := range allRolesOnBattle {
 		if role.isEnemyOf(s.owner) {

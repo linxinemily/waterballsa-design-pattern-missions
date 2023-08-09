@@ -9,7 +9,11 @@ type SkillImpl struct {
 	Skill
 }
 
-func (s *SkillImpl) takeAction(allRolesOnBattle []*RoleImpl) {
+func NewSkillImpl(skill Skill) *SkillImpl {
+	return &SkillImpl{skill}
+}
+
+func (s *SkillImpl) takeAction(allRolesOnBattle []Role) {
 	targets := s.getTargets(allRolesOnBattle)
 
 	s.getOwner().decreaseMp(s.getConsumeMp())
@@ -17,7 +21,7 @@ func (s *SkillImpl) takeAction(allRolesOnBattle []*RoleImpl) {
 	s.execute(targets)
 }
 
-func (s *SkillImpl) printResult(targets []*RoleImpl) {
+func (s *SkillImpl) printResult(targets []Role) {
 	resultString := s.getCustomResultString(targets)
 	if resultString == "" { // default result string
 		if len(targets) == 0 {
@@ -35,21 +39,21 @@ func (s *SkillImpl) printResult(targets []*RoleImpl) {
 }
 
 type Skill interface {
-	getTargets(allRolesOnBattle []*RoleImpl) (targets []*RoleImpl)
+	getTargets(allRolesOnBattle []Role) (targets []Role)
 	getConsumeMp() int
-	execute(targets []*RoleImpl)
-	getOwner() *RoleImpl
+	execute(targets []Role)
+	getOwner() Role
 	getName() string
-	getCustomResultString(targets []*RoleImpl) string
+	getCustomResultString(targets []Role) string
 }
 
 type AbstractSkill struct {
-	owner     *RoleImpl
+	owner     Role
 	consumeMp int
 	name      string
 }
 
-func NewAbstractSkill(owner *RoleImpl, consumeMp int, name string) *AbstractSkill {
+func NewAbstractSkill(owner Role, consumeMp int, name string) *AbstractSkill {
 	return &AbstractSkill{
 		owner:     owner,
 		consumeMp: consumeMp,
@@ -57,7 +61,7 @@ func NewAbstractSkill(owner *RoleImpl, consumeMp int, name string) *AbstractSkil
 	}
 }
 
-func (s *AbstractSkill) getOwner() *RoleImpl {
+func (s *AbstractSkill) getOwner() Role {
 	return s.owner
 }
 
@@ -69,6 +73,6 @@ func (s *AbstractSkill) getName() string {
 	return s.name
 }
 
-func (s *AbstractSkill) getCustomResultString([]*RoleImpl) string {
+func (s *AbstractSkill) getCustomResultString([]Role) string {
 	return ""
 }

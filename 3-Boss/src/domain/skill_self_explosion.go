@@ -4,17 +4,17 @@ type SelfExplosionSkill struct {
 	*AbstractSkill
 }
 
-func NewSelfExplosionSkill(owner *RoleImpl) *SelfExplosionSkill {
+func NewSelfExplosionSkill(owner Role) *SelfExplosionSkill {
 	return &SelfExplosionSkill{NewAbstractSkill(owner, 200, "自爆")}
 }
 
-func (s *SelfExplosionSkill) execute(targets []*RoleImpl) {
+func (s *SelfExplosionSkill) execute(targets []Role) {
 	s.owner.setHp(0)
 	for _, target := range targets {
 		s.owner.attack(target, 150)
 	}
 }
 
-func (s *SelfExplosionSkill) getTargets(allRolesOnBattle []*RoleImpl) []*RoleImpl {
+func (s *SelfExplosionSkill) getTargets(allRolesOnBattle []Role) []Role {
 	return allRolesOnBattle
 }

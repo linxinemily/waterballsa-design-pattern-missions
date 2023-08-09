@@ -42,13 +42,13 @@ func (r *Hero) getSkillFromInput() *SkillImpl {
 	}
 }
 
-func (r *Hero) getTargetsFromInput(candidates []*RoleImpl, amount int) []*RoleImpl {
-	selectedTargets := make([]*RoleImpl, 0)
+func (r *Hero) getTargetsFromInput(candidates []Role, amount int) []Role {
+	selectedTargets := make([]Role, 0)
 
 	for len(selectedTargets) < amount {
 		fmt.Printf("選擇 %d 位目標: ", amount)
 		for i, candidate := range candidates {
-			fmt.Printf("(%d) [%d]%s ", i, i+1, candidate.getName())
+			fmt.Printf("(%d) %s ", i, candidate.getNameWithTroopId())
 		}
 		fmt.Println()
 

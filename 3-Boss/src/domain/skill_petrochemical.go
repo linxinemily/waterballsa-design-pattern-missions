@@ -4,18 +4,18 @@ type PetrochemicalSkill struct {
 	*AbstractSkill
 }
 
-func NewPetrochemicalSkill(owner *RoleImpl) *PetrochemicalSkill {
+func NewPetrochemicalSkill(owner Role) *PetrochemicalSkill {
 	return &PetrochemicalSkill{NewAbstractSkill(owner, 100, "石化")}
 }
 
-func (s *PetrochemicalSkill) execute(targets []*RoleImpl) {
+func (s *PetrochemicalSkill) execute(targets []Role) {
 	for _, target := range targets {
 		target.setState(NewPetrochemicalState(target))
 	}
 }
 
-func (s *PetrochemicalSkill) getTargets(allRolesOnBattle []*RoleImpl) []*RoleImpl {
-	candidates := make([]*RoleImpl, 0)
+func (s *PetrochemicalSkill) getTargets(allRolesOnBattle []Role) []Role {
+	candidates := make([]Role, 0)
 
 	for _, role := range allRolesOnBattle {
 		if role.isEnemyOf(s.owner) {

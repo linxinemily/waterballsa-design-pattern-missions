@@ -5,7 +5,7 @@ type OnePunchSkill struct {
 	*OnePunchEffectImpl
 }
 
-func NewOnePunchSkill(owner *RoleImpl) *OnePunchSkill {
+func NewOnePunchSkill(owner Role) *OnePunchSkill {
 	skill := &OnePunchSkill{AbstractSkill: NewAbstractSkill(owner, 180, "一拳攻擊")}
 	skill.OnePunchEffectImpl = &OnePunchEffectImpl{NewHpMoreThan500Effect(
 		&OnePunchEffectImpl{NewPoisonedOrPetrochemicalEffect(
@@ -18,12 +18,12 @@ func NewOnePunchSkill(owner *RoleImpl) *OnePunchSkill {
 	return skill
 }
 
-func (s *OnePunchSkill) execute(targets []*RoleImpl) {
+func (s *OnePunchSkill) execute(targets []Role) {
 	s.handle(targets)
 }
 
-func (s *OnePunchSkill) getTargets(allRolesOnBattle []*RoleImpl) []*RoleImpl {
-	candidates := make([]*RoleImpl, 0)
+func (s *OnePunchSkill) getTargets(allRolesOnBattle []Role) []Role {
+	candidates := make([]Role, 0)
 
 	for _, role := range allRolesOnBattle {
 		if role.isEnemyOf(s.owner) {

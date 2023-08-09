@@ -29,12 +29,12 @@ func (r *RoleImpl) takeTurn() {
 }
 
 type Role interface {
-	getSkillFromInput() *SkillImpl                                      // implement in concrete role
-	getTargetsFromInput(candidates []*RoleImpl, amount int) []*RoleImpl // implement in concrete role
-	attack(target *RoleImpl, damageUnit int)
+	getSkillFromInput() *SkillImpl                            // implement in concrete role
+	getTargetsFromInput(candidates []Role, amount int) []Role // implement in concrete role
+	attack(target Role, damageUnit int)
 	getDamaged(damageUnit int)
-	isAllyOf(role *RoleImpl) bool
-	isEnemyOf(role *RoleImpl) bool
+	isAllyOf(role Role) bool
+	isEnemyOf(role Role) bool
 	isAlive() bool
 	setState(state RoleState)
 	afterDied()
@@ -55,6 +55,7 @@ type Role interface {
 	getName() string
 	getNameWithTroopId() string
 	getNameWithTroopIdAndStatus() string
+	SetSkills(skill []*SkillImpl)
 }
 
 type AbstractRole struct {
@@ -81,7 +82,7 @@ func NewAbstractRole(id int, name string, HP int, MP int, STR int, rpg *RPG) *Ab
 	}
 }
 
-func (r *AbstractRole) attack(target *RoleImpl, damageUnit int) {
+func (r *AbstractRole) attack(target Role, damageUnit int) {
 	r.state.attack(target, damageUnit)
 	fmt.Printf("%s 對 %s 造成 %d 點傷害。\n", r.getNameWithTroopId(), target.getNameWithTroopId(), damageUnit)
 }
@@ -94,11 +95,11 @@ func (r *AbstractRole) getDamaged(damageUnit int) {
 	}
 }
 
-func (r *AbstractRole) isAllyOf(role *RoleImpl) bool {
+func (r *AbstractRole) isAllyOf(role Role) bool {
 	return r.troop.id == role.getTroop().id
 }
 
-func (r *AbstractRole) isEnemyOf(role *RoleImpl) bool {
+func (r *AbstractRole) isEnemyOf(role Role) bool {
 	return r.troop.id != role.getTroop().id
 }
 
@@ -185,4 +186,8 @@ func (r *AbstractRole) getNameWithTroopIdAndStatus() string {
 	return fmt.Sprintf("%s (HP: %d, MP: %d, STR: %d, State: %s)",
 		r.getNameWithTroopId(), r.getHp(), r.getMp(),
 		r.getStr(), r.getState().getName())
+}
+
+func (r *AbstractRole) SetSkills(skills []*SkillImpl) {
+	r.skills = skills
 }

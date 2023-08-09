@@ -16,6 +16,6 @@ func (r *Slime) getSkillFromInput() *SkillImpl {
 	return nil
 }
 
-func (r *Slime) getTargetsFromInput(candidates []*RoleImpl, amount int) []*RoleImpl {
+func (r *Slime) getTargetsFromInput(candidates []Role, amount int) []Role {
 	return nil
 }

@@ -27,8 +27,8 @@ func (r *RPG) StartBattle(troop1 *Troop, troop2 *Troop) {
 	}
 }
 
-func (r *RPG) getAllRolesOnBattle() []*RoleImpl {
-	var allRoles []*RoleImpl
+func (r *RPG) getAllRolesOnBattle() []Role {
+	var allRoles []Role
 	for _, role := range r.battle.troop1.roles {
 		allRoles = append(allRoles, role)
 	}
@@ -61,7 +61,12 @@ func (r *RPG) CreateAI(name string, HP int, MP int, STR int) *RoleImpl {
 }
 
 func (r *RPG) CreateTroop(roles ...*RoleImpl) *Troop {
+	fmt.Println("隊伍 " + fmt.Sprint(r.troopIdCounter) + " 成立")
 	troop := NewTroop(r.troopIdCounter, roles)
+	for _, role := range roles {
+		role.setTroop(troop)
+		fmt.Println(role.getName()+" 加入了隊伍", role.getTroop().id)
+	}
 	r.troopIdCounter++
 	return troop
 }

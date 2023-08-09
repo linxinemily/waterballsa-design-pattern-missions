@@ -4,17 +4,17 @@ type PoisonSkill struct {
 	*AbstractSkill
 }
 
-func NewPoisonSkill(owner *RoleImpl) *PoisonSkill {
+func NewPoisonSkill(owner Role) *PoisonSkill {
 	return &PoisonSkill{NewAbstractSkill(owner, 80, "中毒")}
 }
 
-func (s *PoisonSkill) execute(targets []*RoleImpl) {
+func (s *PoisonSkill) execute(targets []Role) {
 	target := targets[0]
 	target.setState(NewPoisonedState(target))
 }
 
-func (s *PoisonSkill) getTargets(allRolesOnBattle []*RoleImpl) []*RoleImpl {
-	candidates := make([]*RoleImpl, 0)
+func (s *PoisonSkill) getTargets(allRolesOnBattle []Role) []Role {
+	candidates := make([]Role, 0)
 
 	for _, role := range allRolesOnBattle {
 		if role.isEnemyOf(s.owner) {

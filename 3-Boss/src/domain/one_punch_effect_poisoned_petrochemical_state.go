@@ -8,7 +8,7 @@ func NewPoisonedOrPetrochemicalEffect(next *OnePunchEffectImpl, skill *OnePunchS
 	return &PoisonedOrPetrochemicalEffect{NewAbstractOnePunchEffect(next, skill)}
 }
 
-func (e *PoisonedOrPetrochemicalEffect) match(targets []*RoleImpl) bool {
+func (e *PoisonedOrPetrochemicalEffect) match(targets []Role) bool {
 	switch targets[0].getState().(type) {
 	case *PoisonedState:
 		return true
@@ -19,7 +19,7 @@ func (e *PoisonedOrPetrochemicalEffect) match(targets []*RoleImpl) bool {
 	}
 }
 
-func (e *PoisonedOrPetrochemicalEffect) doHandling(targets []*RoleImpl) {
+func (e *PoisonedOrPetrochemicalEffect) doHandling(targets []Role) {
 	for i := 0; i < 3; i++ {
 		e.skill.getOwner().attack(targets[0], 80)
 	}
