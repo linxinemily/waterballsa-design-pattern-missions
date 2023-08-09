@@ -4,18 +4,18 @@ type FireBallSkill struct {
 	*AbstractSkill
 }
 
-func NewFireBallSkill(owner Role) *FireBallSkill {
-	return &FireBallSkill{NewAbstractSkill(owner, 50)}
+func NewFireBallSkill(owner *RoleImpl) *FireBallSkill {
+	return &FireBallSkill{NewAbstractSkill(owner, 50, "火球")}
 }
 
-func (s *FireBallSkill) execute(targets []Role) {
+func (s *FireBallSkill) execute(targets []*RoleImpl) {
 	for _, target := range targets {
 		s.owner.attack(target, 50)
 	}
 }
 
-func (s *FireBallSkill) getTargets(allRolesOnBattle []Role) []Role {
-	candidates := make([]Role, 0)
+func (s *FireBallSkill) getTargets(allRolesOnBattle []*RoleImpl) []*RoleImpl {
+	candidates := make([]*RoleImpl, 0)
 
 	for _, role := range allRolesOnBattle {
 		if role.isEnemyOf(s.owner) {
@@ -24,8 +24,4 @@ func (s *FireBallSkill) getTargets(allRolesOnBattle []Role) []Role {
 	}
 
 	return candidates
-}
-
-func (s *FireBallSkill) getName() string {
-	return "火球"
 }

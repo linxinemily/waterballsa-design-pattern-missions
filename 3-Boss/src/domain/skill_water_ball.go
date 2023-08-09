@@ -4,18 +4,18 @@ type WaterBallSkill struct {
 	*AbstractSkill
 }
 
-func NewWaterBallSkill(owner Role) *WaterBallSkill {
-	return &WaterBallSkill{NewAbstractSkill(owner, 50)}
+func NewWaterBallSkill(owner *RoleImpl) *WaterBallSkill {
+	return &WaterBallSkill{NewAbstractSkill(owner, 50, "水球")}
 }
 
-func (s *WaterBallSkill) execute(targets []Role) {
+func (s *WaterBallSkill) execute(targets []*RoleImpl) {
 	for _, target := range targets {
 		s.owner.attack(target, 120)
 	}
 }
 
-func (s *WaterBallSkill) getTargets(allRolesOnBattle []Role) []Role {
-	candidates := make([]Role, 0)
+func (s *WaterBallSkill) getTargets(allRolesOnBattle []*RoleImpl) []*RoleImpl {
+	candidates := make([]*RoleImpl, 0)
 
 	for _, role := range allRolesOnBattle {
 		if role.isEnemyOf(s.owner) {
@@ -28,8 +28,4 @@ func (s *WaterBallSkill) getTargets(allRolesOnBattle []Role) []Role {
 	}
 
 	return s.owner.getTargetsFromInput(candidates, 1)
-}
-
-func (s *WaterBallSkill) getName() string {
-	return "水球"
 }

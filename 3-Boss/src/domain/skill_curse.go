@@ -4,22 +4,21 @@ type CurseSkill struct {
 	*AbstractSkill
 }
 
-func NewCurseSkill(owner Role) *CurseSkill {
-	return &CurseSkill{NewAbstractSkill(owner, 100)}
+func NewCurseSkill(owner *RoleImpl) *CurseSkill {
+	return &CurseSkill{NewAbstractSkill(owner, 100, "詛咒")}
 }
 
-func (s *CurseSkill) execute(targets []Role) {
+func (s *CurseSkill) execute(targets []*RoleImpl) {
+	target := targets[0]
 	//先檢查如果 taker 已被相同 giver 詛咒，就跳過
-	for _, target := range targets {
-		if _, ok := target.getAfflictedObservers()[s.owner.getId()]; !ok {
-			target.setAfflictedObserver(s.owner.getId(), NewCursed(s.owner, target))
-		}
+	if _, ok := target.getAfflictedObservers()[s.owner.getId()]; !ok {
+		target.setAfflictedObserver(s.owner.getId(), NewCursed(s.owner, target))
 	}
 }
 
-func (s *CurseSkill) getTargets(allRolesOnBattle []Role) []Role {
+func (s *CurseSkill) getTargets(allRolesOnBattle []*RoleImpl) []*RoleImpl {
 
-	candidates := make([]Role, 0)
+	candidates := make([]*RoleImpl, 0)
 
 	for _, role := range allRolesOnBattle {
 		if role.isEnemyOf(s.owner) {
@@ -32,8 +31,4 @@ func (s *CurseSkill) getTargets(allRolesOnBattle []Role) []Role {
 	}
 
 	return s.owner.getTargetsFromInput(candidates, 1)
-}
-
-func (s *CurseSkill) getName() string {
-	return "詛咒"
 }

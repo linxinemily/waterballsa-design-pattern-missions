@@ -8,7 +8,7 @@ func NewNormalStateEffect(next *OnePunchEffectImpl, skill *OnePunchSkill) *Norma
 	return &NormalStateEffect{NewAbstractOnePunchEffect(next, skill)}
 }
 
-func (e *NormalStateEffect) match(targets []Role) bool {
+func (e *NormalStateEffect) match(targets []*RoleImpl) bool {
 	switch targets[0].getState().(type) {
 	case *NormalState:
 		return true
@@ -17,6 +17,6 @@ func (e *NormalStateEffect) match(targets []Role) bool {
 	}
 }
 
-func (e *NormalStateEffect) doHandling(targets []Role) {
+func (e *NormalStateEffect) doHandling(targets []*RoleImpl) {
 	e.skill.getOwner().attack(targets[0], 100)
 }

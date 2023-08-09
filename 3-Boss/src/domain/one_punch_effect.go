@@ -10,7 +10,7 @@ func NewOnePunchEffectImpl(effect OnePunchEffect) *OnePunchEffectImpl {
 	}
 }
 
-func (e *OnePunchEffectImpl) handle(targets []Role) {
+func (e *OnePunchEffectImpl) handle(targets []*RoleImpl) {
 	if e.match(targets) {
 		e.doHandling(targets)
 	} else if e.getNext() != nil {
@@ -19,8 +19,8 @@ func (e *OnePunchEffectImpl) handle(targets []Role) {
 }
 
 type OnePunchEffect interface {
-	match(targets []Role) bool
-	doHandling(targets []Role)
+	match(targets []*RoleImpl) bool
+	doHandling(targets []*RoleImpl)
 	getNext() *OnePunchEffectImpl
 }
 

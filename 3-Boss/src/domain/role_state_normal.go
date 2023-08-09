@@ -5,5 +5,5 @@ type NormalState struct {
 }
 
 func NewNormalState(role Role) *NormalState {
-	return &NormalState{NewAbstractRoleState(role)}
+	return &NormalState{NewAbstractRoleState(role, "正常")}
 }

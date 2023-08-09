@@ -32,6 +32,10 @@ func (t *Troop) addRole(role *RoleImpl) {
 	role.setTroop(t)
 }
 
+func (t *Troop) getId() int {
+	return t.id
+}
+
 func NewTroop(id int, roles []*RoleImpl) *Troop {
 	return &Troop{id: id, roles: roles}
 }

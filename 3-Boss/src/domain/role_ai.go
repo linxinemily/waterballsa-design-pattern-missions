@@ -14,6 +14,6 @@ func (r *AI) getSkillFromInput() *SkillImpl {
 	return nil
 }
 
-func (r *AI) getTargetsFromInput(candidates []Role, amount int) []Role {
+func (r *AI) getTargetsFromInput(candidates []*RoleImpl, amount int) []*RoleImpl {
 	return nil
 }

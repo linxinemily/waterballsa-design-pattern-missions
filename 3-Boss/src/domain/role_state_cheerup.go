@@ -5,7 +5,7 @@ type CheerUpState struct {
 }
 
 func NewCheerUpState(role Role) *CheerUpState {
-	return &CheerUpState{NewAbstractRoleState(role)}
+	return &CheerUpState{NewAbstractRoleState(role, "鼓舞")}
 }
 
 func (s *CheerUpState) attack(target Role, damageUnit int) {

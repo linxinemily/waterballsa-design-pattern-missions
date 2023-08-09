@@ -1,19 +1,21 @@
 package domain
 
+import "fmt"
+
 type BasicSkill struct {
 	*AbstractSkill
 }
 
-func NewBasicSkill(owner Role) *BasicSkill {
-	return &BasicSkill{NewAbstractSkill(owner, 10)}
+func NewBasicSkill(owner *RoleImpl) *BasicSkill {
+	return &BasicSkill{NewAbstractSkill(owner, 10, "普通攻擊")}
 }
 
-func (s *BasicSkill) execute(targets []Role) {
+func (s *BasicSkill) execute(targets []*RoleImpl) {
 	s.owner.attack(targets[0], s.owner.getStr())
 }
 
-func (s *BasicSkill) getTargets(allRolesOnBattle []Role) (targets []Role) {
-	candidates := make([]Role, 0)
+func (s *BasicSkill) getTargets(allRolesOnBattle []*RoleImpl) (targets []*RoleImpl) {
+	candidates := make([]*RoleImpl, 0)
 
 	for _, role := range allRolesOnBattle {
 		if role.isEnemyOf(s.owner) {
@@ -28,6 +30,6 @@ func (s *BasicSkill) getTargets(allRolesOnBattle []Role) (targets []Role) {
 	return s.owner.getTargetsFromInput(candidates, 1)
 }
 
-func (s *BasicSkill) getName() string {
-	return "普通攻擊"
+func (s *BasicSkill) getCustomResultString(targets []*RoleImpl) string {
+	return fmt.Sprintf("%s 攻擊 %s。\n", s.owner.getNameWithTroopId(), targets[0].getNameWithTroopId())
 }

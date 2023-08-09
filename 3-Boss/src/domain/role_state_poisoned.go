@@ -5,7 +5,7 @@ type PoisonedState struct {
 }
 
 func NewPoisonedState(role Role) *PoisonedState {
-	return &PoisonedState{NewAbstractRoleState(role)}
+	return &PoisonedState{NewAbstractRoleState(role, "中毒")}
 }
 
 func (s *PoisonedState) beforeTakeTurn() (canGoOn bool) {

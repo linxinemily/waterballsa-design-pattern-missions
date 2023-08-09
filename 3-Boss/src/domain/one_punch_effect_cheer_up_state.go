@@ -8,7 +8,7 @@ func NewCheerUpEffect(next *OnePunchEffectImpl, skill *OnePunchSkill) *CheerUpEf
 	return &CheerUpEffect{NewAbstractOnePunchEffect(next, skill)}
 }
 
-func (e *CheerUpEffect) match(targets []Role) bool {
+func (e *CheerUpEffect) match(targets []*RoleImpl) bool {
 	switch targets[0].getState().(type) {
 	case *CheerUpState:
 		return true
@@ -17,7 +17,7 @@ func (e *CheerUpEffect) match(targets []Role) bool {
 	}
 }
 
-func (e *CheerUpEffect) doHandling(targets []Role) {
+func (e *CheerUpEffect) doHandling(targets []*RoleImpl) {
 	target := targets[0]
 	e.skill.getOwner().attack(target, 100)
 	target.setState(NewNormalState(target))

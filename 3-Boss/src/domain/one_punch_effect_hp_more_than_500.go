@@ -8,10 +8,10 @@ func NewHpMoreThan500Effect(next *OnePunchEffectImpl, skill *OnePunchSkill) *HpM
 	return &HpMoreThan500Effect{NewAbstractOnePunchEffect(next, skill)}
 }
 
-func (e *HpMoreThan500Effect) match(targets []Role) bool {
+func (e *HpMoreThan500Effect) match(targets []*RoleImpl) bool {
 	return targets[0].getHp() >= 500
 }
 
-func (e *HpMoreThan500Effect) doHandling(targets []Role) {
+func (e *HpMoreThan500Effect) doHandling(targets []*RoleImpl) {
 	e.skill.getOwner().attack(targets[0], 300)
 }

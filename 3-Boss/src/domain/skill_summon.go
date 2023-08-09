@@ -4,20 +4,16 @@ type SummonSkill struct {
 	*AbstractSkill
 }
 
-func NewSummonSkill(owner Role) *SummonSkill {
-	return &SummonSkill{NewAbstractSkill(owner, 150)}
+func NewSummonSkill(owner *RoleImpl) *SummonSkill {
+	return &SummonSkill{NewAbstractSkill(owner, 150, "召喚")}
 }
 
-func (s *SummonSkill) execute(targets []Role) {
+func (s *SummonSkill) execute(targets []*RoleImpl) {
 	slime := s.owner.getRPG().CreateSlime()
 	s.owner.getTroop().addRole(slime)
 }
 
-func (s *SummonSkill) getTargets(allRolesOnBattle []Role) []Role {
+func (s *SummonSkill) getTargets(allRolesOnBattle []*RoleImpl) []*RoleImpl {
 	// no targets
 	return nil
-}
-
-func (s *SummonSkill) getName() string {
-	return "召喚"
 }

@@ -5,7 +5,7 @@ type PetrochemicalState struct {
 }
 
 func NewPetrochemicalState(role Role) *PetrochemicalState {
-	return &PetrochemicalState{NewAbstractRoleState(role)}
+	return &PetrochemicalState{NewAbstractRoleState(role, "石化")}
 }
 
 func (s *PetrochemicalState) beforeTakeTurn() (canGoOn bool) {

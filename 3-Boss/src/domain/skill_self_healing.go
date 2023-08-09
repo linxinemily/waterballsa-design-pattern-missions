@@ -4,18 +4,14 @@ type SelfHealingSkill struct {
 	*AbstractSkill
 }
 
-func NewSelfHealingSkill(owner Role) *SelfHealingSkill {
-	return &SelfHealingSkill{NewAbstractSkill(owner, 50)}
+func NewSelfHealingSkill(owner *RoleImpl) *SelfHealingSkill {
+	return &SelfHealingSkill{NewAbstractSkill(owner, 50, "自我治療")}
 }
 
-func (s *SelfHealingSkill) execute(targets []Role) {
+func (s *SelfHealingSkill) execute(targets []*RoleImpl) {
 	targets[0].addHp(150)
 }
 
-func (s *SelfHealingSkill) getTargets(allRolesOnBattle []Role) []Role {
-	return []Role{s.owner}
-}
-
-func (s *SelfHealingSkill) getName() string {
-	return "自我治療"
+func (s *SelfHealingSkill) getTargets(allRolesOnBattle []Role) []*RoleImpl {
+	return []*RoleImpl{s.owner}
 }

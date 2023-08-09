@@ -1,5 +1,7 @@
 package domain
 
+import "fmt"
+
 type RPG struct {
 	battle         *Battle
 	hero           *Hero
@@ -19,14 +21,14 @@ func (r *RPG) StartBattle(troop1 *Troop, troop2 *Troop) {
 	}
 
 	if r.hero.isAlive() {
-		println("You win!")
+		fmt.Println("你獲勝了！")
 	} else {
-		println("You lose!")
+		fmt.Println("你失敗了！")
 	}
 }
 
-func (r *RPG) getAllRolesOnBattle() []Role {
-	var allRoles []Role
+func (r *RPG) getAllRolesOnBattle() []*RoleImpl {
+	var allRoles []*RoleImpl
 	for _, role := range r.battle.troop1.roles {
 		allRoles = append(allRoles, role)
 	}

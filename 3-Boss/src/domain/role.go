@@ -1,5 +1,9 @@
 package domain
 
+import (
+	"fmt"
+)
+
 type RoleImpl struct {
 	Role
 }
@@ -9,6 +13,8 @@ func (r *RoleImpl) takeTurn() {
 	if !canGoOn {
 		return
 	}
+
+	fmt.Println("輪到", r.getNameWithTroopIdAndStatus(), "。")
 
 	var skill *SkillImpl
 	for {
@@ -23,12 +29,12 @@ func (r *RoleImpl) takeTurn() {
 }
 
 type Role interface {
-	getSkillFromInput() *SkillImpl                            // implement in concrete role
-	getTargetsFromInput(candidates []Role, amount int) []Role // implement in concrete role
-	attack(target Role, damageUnit int)
+	getSkillFromInput() *SkillImpl                                      // implement in concrete role
+	getTargetsFromInput(candidates []*RoleImpl, amount int) []*RoleImpl // implement in concrete role
+	attack(target *RoleImpl, damageUnit int)
 	getDamaged(damageUnit int)
-	isAllyOf(role Role) bool
-	isEnemyOf(role Role) bool
+	isAllyOf(role *RoleImpl) bool
+	isEnemyOf(role *RoleImpl) bool
 	isAlive() bool
 	setState(state RoleState)
 	afterDied()
@@ -47,6 +53,8 @@ type Role interface {
 	getHp() int
 	getSkills() []*SkillImpl
 	getName() string
+	getNameWithTroopId() string
+	getNameWithTroopIdAndStatus() string
 }
 
 type AbstractRole struct {
@@ -73,22 +81,24 @@ func NewAbstractRole(id int, name string, HP int, MP int, STR int, rpg *RPG) *Ab
 	}
 }
 
-func (r *AbstractRole) attack(target Role, damageUnit int) {
+func (r *AbstractRole) attack(target *RoleImpl, damageUnit int) {
 	r.state.attack(target, damageUnit)
+	fmt.Printf("%s 對 %s 造成 %d 點傷害。\n", r.getNameWithTroopId(), target.getNameWithTroopId(), damageUnit)
 }
 
 func (r *AbstractRole) getDamaged(damageUnit int) {
 	r.HP -= damageUnit
 	if r.HP <= 0 {
+		fmt.Println(r.getNameWithTroopId(), " 死亡。")
 		r.afterDied()
 	}
 }
 
-func (r *AbstractRole) isAllyOf(role Role) bool {
+func (r *AbstractRole) isAllyOf(role *RoleImpl) bool {
 	return r.troop.id == role.getTroop().id
 }
 
-func (r *AbstractRole) isEnemyOf(role Role) bool {
+func (r *AbstractRole) isEnemyOf(role *RoleImpl) bool {
 	return r.troop.id != role.getTroop().id
 }
 
@@ -165,4 +175,14 @@ func (r *AbstractRole) getSkills() []*SkillImpl {
 
 func (r *AbstractRole) getName() string {
 	return r.name
+}
+
+func (r *AbstractRole) getNameWithTroopId() string {
+	return fmt.Sprintf("[%d]%s", r.getTroop().getId(), r.getName())
+}
+
+func (r *AbstractRole) getNameWithTroopIdAndStatus() string {
+	return fmt.Sprintf("%s (HP: %d, MP: %d, STR: %d, State: %s)",
+		r.getNameWithTroopId(), r.getHp(), r.getMp(),
+		r.getStr(), r.getState().getName())
 }
