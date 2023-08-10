@@ -1,7 +1,9 @@
 package domain
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 )
 
 type RoleImpl struct {
@@ -14,13 +16,15 @@ func (r *RoleImpl) takeTurn() {
 		return
 	}
 
-	fmt.Println("輪到", r.getNameWithTroopIdAndStatus(), "。")
+	fmt.Fprintln(r.getRPG().getWriter(), "輪到", r.getNameWithTroopIdAndStatus(), "。")
 
 	var skill *SkillImpl
 	for {
 		skill = r.getSkillFromInput()
 		if skill != nil && skill.getConsumeMp() <= r.getMp() {
 			break
+		} else {
+			fmt.Fprintln(r.getRPG().getWriter(), "MP 不足")
 		}
 	}
 
@@ -55,7 +59,9 @@ type Role interface {
 	getName() string
 	getNameWithTroopId() string
 	getNameWithTroopIdAndStatus() string
-	SetSkills(skill []*SkillImpl)
+	SetSkills(skills ...*SkillImpl)
+	getScanner() *bufio.Scanner
+	setScanner(scanner *bufio.Scanner)
 }
 
 type AbstractRole struct {
@@ -69,28 +75,31 @@ type AbstractRole struct {
 	troop              *Troop
 	afflictedObservers map[int]AfflictedObserver
 	skills             []*SkillImpl
+	scanner            *bufio.Scanner
 }
 
 func NewAbstractRole(id int, name string, HP int, MP int, STR int, rpg *RPG) *AbstractRole {
 	return &AbstractRole{
-		id:   id,
-		name: name,
-		HP:   HP,
-		MP:   MP,
-		STR:  STR,
-		rpg:  rpg,
+		id:      id,
+		name:    name,
+		HP:      HP,
+		MP:      MP,
+		STR:     STR,
+		rpg:     rpg,
+		scanner: bufio.NewScanner(os.Stdin),
 	}
 }
 
 func (r *AbstractRole) attack(target Role, damageUnit int) {
+	fmt.Fprintf(r.getRPG().getWriter(), "%s 攻擊 %s 。\n", r.getNameWithTroopId(), target.getNameWithTroopId())
+	fmt.Fprintf(r.getRPG().getWriter(), "%s 對 %s 造成 %d 點傷害。\n", r.getNameWithTroopId(), target.getNameWithTroopId(), damageUnit)
 	r.state.attack(target, damageUnit)
-	fmt.Printf("%s 對 %s 造成 %d 點傷害。\n", r.getNameWithTroopId(), target.getNameWithTroopId(), damageUnit)
 }
 
 func (r *AbstractRole) getDamaged(damageUnit int) {
 	r.HP -= damageUnit
 	if r.HP <= 0 {
-		fmt.Println(r.getNameWithTroopId(), " 死亡。")
+		fmt.Fprintln(r.getRPG().getWriter(), r.getNameWithTroopId(), " 死亡。")
 		r.afterDied()
 	}
 }
@@ -188,6 +197,14 @@ func (r *AbstractRole) getNameWithTroopIdAndStatus() string {
 		r.getStr(), r.getState().getName())
 }
 
-func (r *AbstractRole) SetSkills(skills []*SkillImpl) {
+func (r *AbstractRole) SetSkills(skills ...*SkillImpl) {
 	r.skills = skills
+}
+
+func (r *AbstractRole) getScanner() *bufio.Scanner {
+	return r.scanner
+}
+
+func (r *AbstractRole) setScanner(scanner *bufio.Scanner) {
+	r.scanner = scanner
 }

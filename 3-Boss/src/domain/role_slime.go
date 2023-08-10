@@ -1,6 +1,8 @@
 package domain
 
-import "strconv"
+import (
+	"strconv"
+)
 
 type Slime struct {
 	*AbstractRole

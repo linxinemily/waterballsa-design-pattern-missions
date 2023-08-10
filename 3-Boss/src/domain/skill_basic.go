@@ -7,7 +7,7 @@ type BasicSkill struct {
 }
 
 func NewBasicSkill(owner Role) *BasicSkill {
-	return &BasicSkill{NewAbstractSkill(owner, 10, "普通攻擊")}
+	return &BasicSkill{NewAbstractSkill(owner, 0, "普通攻擊")}
 }
 
 func (s *BasicSkill) execute(targets []Role) {

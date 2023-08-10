@@ -2,6 +2,7 @@ package domain
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -18,47 +19,44 @@ func NewHero(id int, name string, HP int, MP int, STR int, rpg *RPG) *Hero {
 
 func (r *Hero) getSkillFromInput() *SkillImpl {
 	skills := r.getSkills()
-
+	scanner := r.getScanner()
 	for {
-		fmt.Println("選擇行動：")
+		fmt.Fprintf(r.getRPG().getWriter(), "選擇行動：")
 		for i, skill := range skills {
-			fmt.Printf("(%d) %s ", i, skill.getName())
+			fmt.Fprintf(r.getRPG().getWriter(), "(%d) %s ", i, skill.getName())
 		}
-		fmt.Println()
+		fmt.Fprintln(r.getRPG().getWriter())
 
-		var userInput int
-		fmt.Print("請輸入技能編號：")
-		_, err := fmt.Scanf("%d", &userInput)
+		scanner.Scan()
+		userInput := scanner.Text()
+
+		choice, err := strconv.Atoi(userInput)
 		if err != nil {
-			fmt.Println("輸入錯誤")
-			continue // 重新要求輸入
+			log.Println("輸入錯誤")
+			continue // 重新要求输入
 		}
 
-		if userInput >= 0 && userInput < len(skills) {
-			return skills[userInput]
+		if choice >= 0 && choice < len(skills) {
+			return skills[choice]
 		}
 
-		fmt.Println("無效的技能編號")
+		log.Println("無效的技能編號")
 	}
 }
 
 func (r *Hero) getTargetsFromInput(candidates []Role, amount int) []Role {
 	selectedTargets := make([]Role, 0)
+	scanner := r.getScanner()
 
 	for len(selectedTargets) < amount {
-		fmt.Printf("選擇 %d 位目標: ", amount)
+		fmt.Fprintf(r.getRPG().getWriter(), "選擇 %d 位目標: ", amount)
 		for i, candidate := range candidates {
-			fmt.Printf("(%d) %s ", i, candidate.getNameWithTroopId())
+			fmt.Fprintf(r.getRPG().getWriter(), "(%d) %s ", i, candidate.getNameWithTroopId())
 		}
-		fmt.Println()
+		fmt.Fprintln(r.getRPG().getWriter())
 
-		var userInput string
-		fmt.Print("請輸入目標編號，用逗號分隔：")
-		_, err := fmt.Scanln(&userInput)
-		if err != nil {
-			fmt.Println("輸入錯誤")
-			continue
-		}
+		scanner.Scan()
+		userInput := scanner.Text()
 
 		indices := strings.Split(userInput, ",")
 		for _, indexStr := range indices {
@@ -66,7 +64,7 @@ func (r *Hero) getTargetsFromInput(candidates []Role, amount int) []Role {
 			if idx, err := strconv.Atoi(index); err == nil && idx >= 0 && idx < len(candidates) {
 				selectedTargets = append(selectedTargets, candidates[idx])
 			} else {
-				fmt.Printf("無效的目標編號：%s\n", index)
+				log.Printf("無效的目標編號：%s\n", index)
 			}
 		}
 	}

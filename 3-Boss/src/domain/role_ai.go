@@ -1,5 +1,9 @@
 package domain
 
+import (
+	"fmt"
+)
+
 type AI struct {
 	*AbstractRole
 	seed int
@@ -12,8 +16,16 @@ func NewAI(id int, name string, HP int, MP int, STR int, rpg *RPG) *AI {
 }
 
 func (r *AI) getSkillFromInput() *SkillImpl {
+
+	fmt.Fprintf(r.getRPG().getWriter(), "選擇行動：")
+	for i, skill := range r.getSkills() {
+		fmt.Fprintf(r.getRPG().getWriter(), "(%d) %s ", i, skill.getName())
+	}
+	fmt.Fprintln(r.getRPG().getWriter())
+
 	skill := r.getSkills()[r.seed%len(r.getSkills())]
 	r.seed++
+
 	return skill
 }
 

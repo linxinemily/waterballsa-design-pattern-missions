@@ -16,7 +16,7 @@ func TestAiGetSkillFromInput(t *testing.T) {
 	}
 
 	ai := NewAI(1, "AI", 1000, 100, 100, nil)
-	ai.SetSkills([]*SkillImpl{{NewBasicSkill(ai)}, {NewWaterBallSkill(ai)}, {NewCurseSkill(ai)}})
+	ai.SetSkills(&SkillImpl{NewBasicSkill(ai)}, &SkillImpl{NewWaterBallSkill(ai)}, &SkillImpl{NewCurseSkill(ai)})
 
 	for _, tt := range table {
 		ai.setSeed(tt.seed)

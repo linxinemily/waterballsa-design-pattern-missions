@@ -1,29 +1,33 @@
 package domain
 
-import "fmt"
+import (
+	"fmt"
+	"io"
+)
 
 type RPG struct {
 	battle         *Battle
 	hero           *Hero
 	roleIdCounter  int
 	troopIdCounter int
+	writer         io.Writer
 }
 
-func NewRPG() *RPG {
-	return &RPG{}
+func NewRPG(writer io.Writer) *RPG {
+	return &RPG{roleIdCounter: 1, troopIdCounter: 1, writer: writer}
 }
 
 func (r *RPG) StartBattle(troop1 *Troop, troop2 *Troop) {
-	r.battle = NewBattle(troop1, troop2)
+	r.battle = NewBattle(troop1, troop2, r.hero)
 
 	for r.battle.takeRound() {
 		r.battle.updateRound()
 	}
 
 	if r.hero.isAlive() {
-		fmt.Println("你獲勝了！")
+		fmt.Fprintln(r.getWriter(), "你獲勝了！")
 	} else {
-		fmt.Println("你失敗了！")
+		fmt.Fprintln(r.getWriter(), "你失敗了！")
 	}
 }
 
@@ -40,6 +44,7 @@ func (r *RPG) getAllRolesOnBattle() []Role {
 
 func (r *RPG) CreateSlime() *RoleImpl {
 	slime := NewSlime(r.roleIdCounter, r)
+	slime.SetSkills(&SkillImpl{NewBasicSkill(slime)})
 	r.roleIdCounter++
 	return &RoleImpl{Role: slime}
 }
@@ -49,6 +54,7 @@ func (r *RPG) CreateHero(name string, HP int, MP int, STR int) *RoleImpl {
 		panic("Hero already exists")
 	}
 	hero := NewHero(r.roleIdCounter, name, HP, MP, STR, r)
+	hero.SetSkills(&SkillImpl{NewBasicSkill(hero)})
 	r.roleIdCounter++
 	r.hero = hero
 	return &RoleImpl{Role: hero}
@@ -56,17 +62,20 @@ func (r *RPG) CreateHero(name string, HP int, MP int, STR int) *RoleImpl {
 
 func (r *RPG) CreateAI(name string, HP int, MP int, STR int) *RoleImpl {
 	ai := NewAI(r.roleIdCounter, name, HP, MP, STR, r)
+	ai.SetSkills(&SkillImpl{NewBasicSkill(ai)})
 	r.roleIdCounter++
 	return &RoleImpl{Role: ai}
 }
 
 func (r *RPG) CreateTroop(roles ...*RoleImpl) *Troop {
-	fmt.Println("隊伍 " + fmt.Sprint(r.troopIdCounter) + " 成立")
 	troop := NewTroop(r.troopIdCounter, roles)
 	for _, role := range roles {
 		role.setTroop(troop)
-		fmt.Println(role.getName()+" 加入了隊伍", role.getTroop().id)
 	}
 	r.troopIdCounter++
 	return troop
+}
+
+func (r *RPG) getWriter() io.Writer {
+	return r.writer
 }

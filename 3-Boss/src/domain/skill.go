@@ -25,16 +25,16 @@ func (s *SkillImpl) printResult(targets []Role) {
 	resultString := s.getCustomResultString(targets)
 	if resultString == "" { // default result string
 		if len(targets) == 0 {
-			fmt.Printf("%s 使用了 %s。\n", s.getOwner().getNameWithTroopId(), s.getName())
+			fmt.Fprintf(s.getOwner().getRPG().getWriter(), "%s 使用了 %s。\n", s.getOwner().getNameWithTroopId(), s.getName())
 		} else {
 			targetNames := make([]string, 0)
 			for _, target := range targets {
 				targetNames = append(targetNames, target.getNameWithTroopId())
 			}
-			fmt.Printf("%s 對 %s 使用了 %s。\n", s.getOwner().getNameWithTroopId(), strings.Join(targetNames, ","), s.getName())
+			fmt.Fprintf(s.getOwner().getRPG().getWriter(), "%s 對 %s 使用了 %s。\n", s.getOwner().getNameWithTroopId(), strings.Join(targetNames, ","), s.getName())
 		}
 	} else {
-		fmt.Println(s.getCustomResultString(targets))
+		fmt.Fprintln(s.getOwner().getRPG().getWriter(), s.getCustomResultString(targets))
 	}
 }
 

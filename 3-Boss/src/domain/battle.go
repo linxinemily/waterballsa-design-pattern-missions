@@ -1,15 +1,14 @@
 package domain
 
-import "fmt"
-
 type Battle struct {
 	round  int
 	troop1 *Troop
 	troop2 *Troop
+	hero   *Hero
 }
 
-func NewBattle(troop1, troop2 *Troop) *Battle {
-	battle := &Battle{troop1: troop1, troop2: troop2}
+func NewBattle(troop1, troop2 *Troop, hero *Hero) *Battle {
+	battle := &Battle{troop1: troop1, troop2: troop2, hero: hero}
 	troop1.setBattle(battle)
 	troop2.setBattle(battle)
 	return battle
@@ -17,15 +16,17 @@ func NewBattle(troop1, troop2 *Troop) *Battle {
 
 func (b *Battle) takeRound() (hasNextRound bool) {
 
-	roles := make([]*RoleImpl, 0)
-	roles = append(roles, b.troop1.roles...)
-	roles = append(roles, b.troop2.roles...)
+	troops := []*Troop{b.troop1, b.troop2}
 
-	for _, role := range roles {
-		fmt.Println("輪到", role.getName(), "行動")
-		role.takeTurn()
-		if !role.isAlive() || b.troop1.isAnnihilated() || b.troop2.isAnnihilated() {
-			return false
+	for _, troop := range troops {
+		for _, role := range troop.roles {
+			if !role.isAlive() {
+				continue
+			}
+			role.takeTurn()
+			if !b.hero.isAlive() || b.troop1.isAnnihilated() || b.troop2.isAnnihilated() {
+				return false
+			}
 		}
 	}
 
