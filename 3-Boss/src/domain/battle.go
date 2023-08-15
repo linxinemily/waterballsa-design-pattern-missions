@@ -15,10 +15,7 @@ func NewBattle(troop1, troop2 *Troop, hero *Hero) *Battle {
 }
 
 func (b *Battle) takeRound() (hasNextRound bool) {
-
-	troops := []*Troop{b.troop1, b.troop2}
-
-	for _, troop := range troops {
+	for _, troop := range []*Troop{b.troop1, b.troop2} {
 		for i := 0; i < len(troop.roles); i++ {
 			role := troop.roles[i]
 			if !role.isAlive() {
@@ -35,10 +32,9 @@ func (b *Battle) takeRound() (hasNextRound bool) {
 }
 
 func (b *Battle) updateRound() {
-	for _, role := range b.troop1.roles {
-		role.getState().updateRound()
-	}
-	for _, role := range b.troop2.roles {
-		role.getState().updateRound()
+	for _, troop := range []*Troop{b.troop1, b.troop2} {
+		for _, role := range troop.roles {
+			role.getState().updateRound()
+		}
 	}
 }
