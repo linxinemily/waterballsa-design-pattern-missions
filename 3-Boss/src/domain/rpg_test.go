@@ -47,6 +47,11 @@ var skillFactory = map[string]func(Role) Skill{
 
 func TestRpg(t *testing.T) {
 
+	testcasesDirPath := os.Getenv("TESTCASES_DIR_PATH")
+	if testcasesDirPath == "" {
+		panic("TESTCASES_DIR_PATH is not set")
+	}
+
 	table := []struct {
 		filename string
 	}{
@@ -65,7 +70,7 @@ func TestRpg(t *testing.T) {
 	for _, tt := range table {
 		t.Run(tt.filename, func(t *testing.T) {
 
-			inputFile := fmt.Sprintf("../testcases/%s.in", tt.filename)
+			inputFile := fmt.Sprintf("%s/%s.in", testcasesDirPath, tt.filename)
 
 			file, err := os.Open(inputFile)
 			if err != nil {
