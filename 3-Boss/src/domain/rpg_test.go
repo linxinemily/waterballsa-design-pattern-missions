@@ -141,7 +141,7 @@ func TestRpg(t *testing.T) {
 
 			rpg.StartBattle(troops["1"], troops["2"])
 
-			content, err := os.ReadFile(fmt.Sprintf("../testcases/%s.out", tt.filename))
+			content, err := os.ReadFile(fmt.Sprintf("%s/%s.out", testcasesDirPath, tt.filename))
 			if err != nil {
 				log.Fatal(err)
 			}
