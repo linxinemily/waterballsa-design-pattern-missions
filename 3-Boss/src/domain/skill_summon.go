@@ -11,6 +11,7 @@ func NewSummonSkill(owner Role) *SummonSkill {
 func (s *SummonSkill) execute(targets []Role) {
 	slime := s.owner.getRPG().CreateSlime()
 	s.owner.getTroop().addRole(slime)
+	slime.setAfflictedObserver(s.owner.getId(), NewSummoned(s.owner, slime))
 }
 
 func (s *SummonSkill) getTargets(allRolesOnBattle []Role) []Role {

@@ -31,20 +31,21 @@ func (r *RPG) StartBattle(troop1 *Troop, troop2 *Troop) {
 	}
 }
 
-func (r *RPG) getAllRolesOnBattle() []Role {
+func (r *RPG) getAllAliveRolesOnBattle() []Role {
 	var allRoles []Role
-	for _, role := range r.battle.troop1.roles {
-		allRoles = append(allRoles, role)
-	}
-	for _, role := range r.battle.troop2.roles {
-		allRoles = append(allRoles, role)
+	for _, troop := range []*Troop{r.battle.troop1, r.battle.troop2} {
+		for _, role := range troop.roles {
+			if role.isAlive() {
+				allRoles = append(allRoles, role)
+			}
+		}
 	}
 	return allRoles
 }
 
 func (r *RPG) CreateSlime() *RoleImpl {
 	slime := NewSlime(r.roleIdCounter, r)
-	slime.SetSkills(&SkillImpl{NewBasicSkill(slime)})
+	slime.addSkill(&SkillImpl{NewBasicSkill(slime)})
 	r.roleIdCounter++
 	return &RoleImpl{Role: slime}
 }
@@ -54,7 +55,7 @@ func (r *RPG) CreateHero(name string, HP int, MP int, STR int) *RoleImpl {
 		panic("Hero already exists")
 	}
 	hero := NewHero(r.roleIdCounter, name, HP, MP, STR, r)
-	hero.SetSkills(&SkillImpl{NewBasicSkill(hero)})
+	hero.addSkill(&SkillImpl{NewBasicSkill(hero)})
 	r.roleIdCounter++
 	r.hero = hero
 	return &RoleImpl{Role: hero}
@@ -62,7 +63,7 @@ func (r *RPG) CreateHero(name string, HP int, MP int, STR int) *RoleImpl {
 
 func (r *RPG) CreateAI(name string, HP int, MP int, STR int) *RoleImpl {
 	ai := NewAI(r.roleIdCounter, name, HP, MP, STR, r)
-	ai.SetSkills(&SkillImpl{NewBasicSkill(ai)})
+	ai.addSkill(&SkillImpl{NewBasicSkill(ai)})
 	r.roleIdCounter++
 	return &RoleImpl{Role: ai}
 }

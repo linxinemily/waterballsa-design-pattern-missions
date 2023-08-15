@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"strconv"
+	"fmt"
 )
 
 type Slime struct {
@@ -9,15 +9,16 @@ type Slime struct {
 }
 
 func NewSlime(id int, rpg *RPG) *Slime {
-	slime := &Slime{NewAbstractRole(id, "slime"+strconv.Itoa(id), 10, 0, 50, rpg)}
+	slime := &Slime{NewAbstractRole(id, "Slime", 100, 0, 50, rpg)}
 	slime.setState(NewNormalState(slime))
 	return slime
 }
 
 func (r *Slime) getSkillFromInput() *SkillImpl {
-	return nil
+	fmt.Fprintln(r.getRPG().getWriter(), fmt.Sprintf("選擇行動：(0) %s", r.getSkills()[0].getName()))
+	return r.getSkills()[0]
 }
 
 func (r *Slime) getTargetsFromInput(candidates []Role, amount int) []Role {
-	return nil
+	return candidates[:amount]
 }

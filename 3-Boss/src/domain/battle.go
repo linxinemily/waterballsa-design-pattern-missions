@@ -19,7 +19,8 @@ func (b *Battle) takeRound() (hasNextRound bool) {
 	troops := []*Troop{b.troop1, b.troop2}
 
 	for _, troop := range troops {
-		for _, role := range troop.roles {
+		for i := 0; i < len(troop.roles); i++ {
+			role := troop.roles[i]
 			if !role.isAlive() {
 				continue
 			}

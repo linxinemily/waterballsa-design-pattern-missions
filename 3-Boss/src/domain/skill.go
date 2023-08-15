@@ -18,23 +18,19 @@ func (s *SkillImpl) takeAction(allRolesOnBattle []Role) {
 
 	s.getOwner().decreaseMp(s.getConsumeMp())
 
+	s.printResult(targets)
 	s.execute(targets)
 }
 
 func (s *SkillImpl) printResult(targets []Role) {
-	resultString := s.getCustomResultString(targets)
-	if resultString == "" { // default result string
-		if len(targets) == 0 {
-			fmt.Fprintf(s.getOwner().getRPG().getWriter(), "%s 使用了 %s。\n", s.getOwner().getNameWithTroopId(), s.getName())
-		} else {
-			targetNames := make([]string, 0)
-			for _, target := range targets {
-				targetNames = append(targetNames, target.getNameWithTroopId())
-			}
-			fmt.Fprintf(s.getOwner().getRPG().getWriter(), "%s 對 %s 使用了 %s。\n", s.getOwner().getNameWithTroopId(), strings.Join(targetNames, ","), s.getName())
+	if len(targets) == 0 {
+		fmt.Fprintf(s.getOwner().getRPG().getWriter(), "%s 使用了 %s。\n", s.getOwner().getNameWithTroopId(), s.getName())
+	} else if _, ok := s.Skill.(*BasicSkill); !ok {
+		targetNames := make([]string, 0)
+		for _, target := range targets {
+			targetNames = append(targetNames, target.getNameWithTroopId())
 		}
-	} else {
-		fmt.Fprintln(s.getOwner().getRPG().getWriter(), s.getCustomResultString(targets))
+		fmt.Fprintf(s.getOwner().getRPG().getWriter(), "%s 對 %s 使用了 %s。\n", s.getOwner().getNameWithTroopId(), strings.Join(targetNames, ", "), s.getName())
 	}
 }
 
@@ -44,7 +40,6 @@ type Skill interface {
 	execute(targets []Role)
 	getOwner() Role
 	getName() string
-	getCustomResultString(targets []Role) string
 }
 
 type AbstractSkill struct {
@@ -71,8 +66,4 @@ func (s *AbstractSkill) getConsumeMp() int {
 
 func (s *AbstractSkill) getName() string {
 	return s.name
-}
-
-func (s *AbstractSkill) getCustomResultString([]Role) string {
-	return ""
 }

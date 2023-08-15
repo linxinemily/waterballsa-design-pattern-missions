@@ -16,7 +16,12 @@ func (t *Troop) removeRoleById(id int) {
 }
 
 func (t *Troop) isAnnihilated() bool {
-	return len(t.roles) == 0
+	for _, role := range t.roles {
+		if role.isAlive() {
+			return false
+		}
+	}
+	return true
 }
 
 func (t *Troop) setBattle(battle *Battle) {

@@ -20,28 +20,25 @@ func NewHero(id int, name string, HP int, MP int, STR int, rpg *RPG) *Hero {
 func (r *Hero) getSkillFromInput() *SkillImpl {
 	skills := r.getSkills()
 	scanner := r.getScanner()
-	for {
-		fmt.Fprintf(r.getRPG().getWriter(), "選擇行動：")
-		for i, skill := range skills {
-			fmt.Fprintf(r.getRPG().getWriter(), "(%d) %s ", i, skill.getName())
-		}
-		fmt.Fprintln(r.getRPG().getWriter())
-
-		scanner.Scan()
-		userInput := scanner.Text()
-
-		choice, err := strconv.Atoi(userInput)
-		if err != nil {
-			log.Println("輸入錯誤")
-			continue // 重新要求输入
-		}
-
-		if choice >= 0 && choice < len(skills) {
-			return skills[choice]
-		}
-
-		log.Println("無效的技能編號")
+	skillNames := make([]string, len(skills))
+	for i, skill := range skills {
+		skillNames[i] = fmt.Sprintf("(%d) %s", i, skill.getName())
 	}
+	fmt.Fprintln(r.getRPG().getWriter(), fmt.Sprintf("選擇行動：%s", strings.Join(skillNames, " ")))
+
+	scanner.Scan()
+	userInput := scanner.Text()
+
+	choice, err := strconv.Atoi(userInput)
+	if err != nil {
+		panic(err)
+	}
+
+	if choice >= 0 && choice < len(skills) {
+		return skills[choice]
+	}
+
+	panic(fmt.Sprintf("無效的選擇: %d", choice))
 }
 
 func (r *Hero) getTargetsFromInput(candidates []Role, amount int) []Role {
@@ -49,11 +46,11 @@ func (r *Hero) getTargetsFromInput(candidates []Role, amount int) []Role {
 	scanner := r.getScanner()
 
 	for len(selectedTargets) < amount {
-		fmt.Fprintf(r.getRPG().getWriter(), "選擇 %d 位目標: ", amount)
+		candidatesStr := make([]string, len(candidates))
 		for i, candidate := range candidates {
-			fmt.Fprintf(r.getRPG().getWriter(), "(%d) %s ", i, candidate.getNameWithTroopId())
+			candidatesStr[i] = fmt.Sprintf("(%d) %s", i, candidate.getNameWithTroopId())
 		}
-		fmt.Fprintln(r.getRPG().getWriter())
+		fmt.Fprintln(r.getRPG().getWriter(), fmt.Sprintf("選擇 %d 位目標: %s", amount, strings.Join(candidatesStr, " ")))
 
 		scanner.Scan()
 		userInput := scanner.Text()

@@ -9,9 +9,9 @@ func NewSelfHealingSkill(owner Role) *SelfHealingSkill {
 }
 
 func (s *SelfHealingSkill) execute(targets []Role) {
-	targets[0].addHp(150)
+	s.owner.addHp(150)
 }
 
 func (s *SelfHealingSkill) getTargets(allRolesOnBattle []Role) []Role {
-	return []Role{s.owner}
+	return nil
 }

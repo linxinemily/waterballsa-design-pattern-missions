@@ -5,7 +5,7 @@ type PoisonSkill struct {
 }
 
 func NewPoisonSkill(owner Role) *PoisonSkill {
-	return &PoisonSkill{NewAbstractSkill(owner, 80, "中毒")}
+	return &PoisonSkill{NewAbstractSkill(owner, 80, "下毒")}
 }
 
 func (s *PoisonSkill) execute(targets []Role) {

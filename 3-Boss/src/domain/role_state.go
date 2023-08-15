@@ -37,7 +37,7 @@ func (s *AbstractRoleState) updateRound() {
 }
 
 func (s *AbstractRoleState) attack(target Role, damageUnit int) {
-	target.getDamaged(damageUnit)
+	target.getDamagedBy(damageUnit, s.role)
 }
 
 func (s *AbstractRoleState) setRole(r Role) {

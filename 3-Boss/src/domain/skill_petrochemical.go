@@ -23,9 +23,10 @@ func (s *PetrochemicalSkill) getTargets(allRolesOnBattle []Role) []Role {
 		}
 	}
 
-	if len(candidates) <= 3 {
+	amount := 1
+	if len(candidates) <= amount {
 		return candidates
 	}
 
-	return s.owner.getTargetsFromInput(candidates, 3)
+	return s.owner.getTargetsFromInput(candidates, amount)
 }

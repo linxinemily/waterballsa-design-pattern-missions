@@ -2,10 +2,10 @@ package domain
 
 type Summoned struct {
 	summoner Role
-	summoned *Slime
+	summoned Role
 }
 
-func NewSummoned(summoner Role, summoned *Slime) *Summoned {
+func NewSummoned(summoner Role, summoned Role) *Summoned {
 	return &Summoned{
 		summoner: summoner,
 		summoned: summoned,

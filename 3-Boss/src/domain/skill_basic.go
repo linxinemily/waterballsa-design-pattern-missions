@@ -11,6 +11,7 @@ func NewBasicSkill(owner Role) *BasicSkill {
 }
 
 func (s *BasicSkill) execute(targets []Role) {
+	fmt.Fprintf(s.owner.getRPG().getWriter(), "%s 攻擊 %s。\n", s.owner.getNameWithTroopId(), targets[0].getNameWithTroopId())
 	s.owner.attack(targets[0], s.owner.getStr())
 }
 
@@ -28,8 +29,4 @@ func (s *BasicSkill) getTargets(allRolesOnBattle []Role) (targets []Role) {
 	}
 
 	return s.owner.getTargetsFromInput(candidates, 1)
-}
-
-func (s *BasicSkill) getCustomResultString(targets []Role) string {
-	return fmt.Sprintf("%s 攻擊 %s。\n", s.owner.getNameWithTroopId(), targets[0].getNameWithTroopId())
 }

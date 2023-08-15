@@ -21,6 +21,9 @@ func (e *PoisonedOrPetrochemicalEffect) match(targets []Role) bool {
 
 func (e *PoisonedOrPetrochemicalEffect) doHandling(targets []Role) {
 	for i := 0; i < 3; i++ {
+		if !targets[0].isAlive() {
+			break
+		}
 		e.skill.getOwner().attack(targets[0], 80)
 	}
 }
